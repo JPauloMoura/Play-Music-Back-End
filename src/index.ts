@@ -2,15 +2,14 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors"
 import {AddressInfo} from "net";
+import { userRoute } from "./routes/userRoutes";
 
 dotenv.config()
 const app: Express = express()
 app.use(express.json())
 app.use(cors())
 
-app.get("/", (req: Request, res: Response)=>{
-  res.send({message: "aplicação funcionando"})
-})
+app.use("/", userRoute)
 
 const server = app.listen(3000, () => {
     if (server) {
