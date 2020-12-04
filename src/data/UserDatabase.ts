@@ -21,5 +21,18 @@ export class UserDatabase extends BaseDatabase {
             throw new Error(err.Message || err.sqlMessage); 
         }
     }
+
+    public getUserByEmail = async (email: string):Promise<User> => {
+        try {
+            const [resp] = await this.getConnection()
+                        .select('*')
+                        .from(this.tableNames.user)
+                        .where({email})
+
+            return User.toUserModel(resp)
+        } catch (err) {
+            throw new Error(err.Message || err.sqlMessage);
+        }
+    }
 }
 // usar o metodo toUserModel( ) para modelar os dados da requisição do banco
