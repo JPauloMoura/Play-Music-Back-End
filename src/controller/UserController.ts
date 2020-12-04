@@ -1,6 +1,6 @@
 import {Request, Response} from "express"
 import { UserDatabase } from "../data/UserDatabase"
-import { UserInputDTO } from "../model/User"
+import { LoginInputDTO, UserInputDTO } from "../model/User"
 import { Authenticator } from "../services/Authenticator"
 import { HashManager } from "../services/HashManager"
 import { IdGenerator } from "../services/IdGenerator"
@@ -34,6 +34,30 @@ export class UserController {
         } finally{
           await  BaseDatabase.destroyConnection()
         }
-    
+    }
+
+    public async login(req: Request, res: Response):Promise<void> {
+        try {
+            const input: LoginInputDTO = {
+                email: req.body.email,
+                password: req.body.password
+            }
+
+            const userBusiness = new UserBusiness(
+                new Authenticator,
+                new UserDatabase,
+                new IdGenerator,
+                regexEmail,
+                new HashManager
+            )
+
+            const token = await userBusiness.login(input)
+            
+            res.status(200).send({message: "Success", token})
+        } catch (error) {
+            res.status(400).send({message: error.message || error.sqlMessage})
+        } finally {
+            await BaseDatabase.destroyConnection()
+        }
     }
 }
