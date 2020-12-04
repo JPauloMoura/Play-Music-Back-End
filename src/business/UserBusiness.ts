@@ -1,6 +1,8 @@
 import { UserDatabase } from "../data/UserDatabase";
 import { InvalidInputError } from "../error/InvalidInputError";
-import { User, UserInputDTO } from "../model/User";
+import { UnauthorizedError } from "../error/UnauthorizedError";
+import { NotFoundError } from "../error/NotFoundError";
+import { LoginInputDTO, User, UserInputDTO } from "../model/User";
 import { Authenticator } from "../services/Authenticator";
 import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
@@ -33,7 +35,28 @@ export class UserBusiness {
             return this.authenticator.generateToken({id: newUser.getId()})
             
         } catch (error) {
-            throw new Error(error);
+            throw new Error(error)
+        }
+    }
+
+    public async login(input: LoginInputDTO):Promise<string> {
+        try {
+            if(!input.email || !input.password) throw new InvalidInputError("Invalid email format")
+
+            if(!this.validEmail.test(input.email)) throw new InvalidInputError("Invalid email format")
+
+            const user:User = await this.userDatabase.getUserByEmail(input.email)
+
+            if(!user) throw new NotFoundError("Invalid email or password")
+
+            const passwordIsValid:boolean = await this.hashManager.compare(input.password ,user.getPassword())
+
+            if(!passwordIsValid) throw new UnauthorizedError("Invalid email or password")
+
+            return this.authenticator.generateToken({id: user.getId()})
+
+        } catch (error) {
+            throw new Error(error)
         }
     }
 }
