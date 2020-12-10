@@ -19,3 +19,7 @@ export class Genre {
     }
 }
 
+export interface InputGenreDTO {
+    id: string
+    genre: string
+}
