@@ -15,11 +15,18 @@ export class Authenticator {
   }
 
   public getData(token: string): AuthenticationData {
-    const payload = jwt.verify(token, process.env.JWT_KEY as string) as any;
-    const result = {
-      id: payload.id
-    };
-    return result;
+    try {
+      const payload = jwt.verify(token, process.env.JWT_KEY as string) as any;
+      
+      const result = {
+        id: payload.id
+      };
+      
+      return result;
+    } catch (error) {
+      if(error.message.includes("jwt")) throw new Error("Token invalido")
+      throw new Error(error)
+    }
   }
 }
 
