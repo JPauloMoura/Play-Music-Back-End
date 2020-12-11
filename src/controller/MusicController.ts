@@ -41,6 +41,25 @@ export class MusicController {
           await  BaseDatabase.destroyConnection()
         }
     }
+
+    public async getAllMusic(req: Request, res: Response):Promise<any> {
+        try {
+
+            const musicBusiness = new MusicBusiness(
+                new Authenticator,
+                new MusicDatabase,
+                new GenreDatabase,
+                new GenreMusicDatabase,
+                new IdGenerator,
+            )
+            
+            const listMusic = await musicBusiness.getAllMusic(req.headers.authorization as string)
+            
+            res.status(200).send(listMusic)
+        } catch (error) {
+            res.status(400).send({message: error.message || error.sqlMessage})
+        }
+    }
 }
 
 /**

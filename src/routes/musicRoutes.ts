@@ -9,3 +9,4 @@ const musicController = new MusicController()
 const upload = multer(config)
 
 musicRoute.post("/upload", authVerify, upload.single("file"), musicController.createMusic)
+musicRoute.get("/all", authVerify, musicController.getAllMusic)
