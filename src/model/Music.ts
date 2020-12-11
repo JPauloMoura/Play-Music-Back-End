@@ -34,7 +34,7 @@ export class Music {
             music.date,
             music.file,
             music.album,
-            music.idUser
+            music.id_user
         ))
     }
 }
