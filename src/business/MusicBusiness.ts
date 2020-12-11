@@ -51,4 +51,17 @@ export class MusicBusiness {
             throw new Error(error)
         }
     }
+
+    public async getAllMusic(token:string): Promise<Music[]> {
+        try {
+           const user = this.authenticator.getData(token)
+
+           const listMusic:Music[] = await this.musicDatabase.getAllMusic(user.id)
+
+           return listMusic
+            
+        } catch (error) {
+            throw new Error(error);  
+        }
+    }
 }
