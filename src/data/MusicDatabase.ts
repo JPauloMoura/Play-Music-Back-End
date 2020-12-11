@@ -23,4 +23,16 @@ export class MusicDatabase extends BaseDatabase {
             throw new Error(err.Message || err.sqlMessage); 
         }
     }
+
+    public getAllMusic = async (id: string): Promise<Music[]> => {
+        try {
+            const result = await this.getConnection()
+            .select('*').from(this.tableNames.music).where({id_user: id})
+
+            const listMusic:Music[] = result.map((item)=> Music.toMusicModel(item))
+            return listMusic
+        } catch (err) {
+            throw new Error(err.message || err.sqlMessage)
+        }
+    }
 }
