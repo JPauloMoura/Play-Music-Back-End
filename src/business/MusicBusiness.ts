@@ -32,9 +32,8 @@ export class MusicBusiness {
             const newMusic:Music = Music.toMusicModel({
                 ...input,
                 id: idMusic,
-                idUser: user.id
+                id_user: user.id
             })
-
             await this.musicDatabase.createMusic(newMusic) 
 
             for(const index in input.genre){
@@ -43,7 +42,7 @@ export class MusicBusiness {
 
                 const dataGenre = await this.genreDatabase.getGenreByName(input.genre[index]) 
 
-                const newGenreMusic: GenreMusic = GenreMusic.toGenreMusicModel({idMusic: idMusic, idGenre: dataGenre.getId()})
+                const newGenreMusic: GenreMusic = GenreMusic.toGenreMusicModel({id_music: idMusic, id_genre: dataGenre.getId()})
                 await this.genreMusicDatabase.createGenreMusic(newGenreMusic)
             }
             

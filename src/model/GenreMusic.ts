@@ -13,8 +13,8 @@ export class GenreMusic {
 
     static toGenreMusicModel = (genre: any):GenreMusic =>{
         return (genre && new GenreMusic(
-            genre.idMusic,
-            genre.idGenre,
+            genre.id_music,
+            genre.id_genre,
         ))
     }
 }
