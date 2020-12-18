@@ -1,4 +1,5 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
+import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
 import cors from "cors"
 import {AddressInfo} from "net";
@@ -10,6 +11,7 @@ const app: Express = express()
 app.use(express.json())
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
+app.use(fileUpload());
 
 app.use("/", userRoute)
 app.use("/music", musicRoute)
