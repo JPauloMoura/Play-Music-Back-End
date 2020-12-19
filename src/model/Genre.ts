@@ -14,7 +14,7 @@ export class Genre {
     static toGenreModel = (genre: any):Genre =>{
         return (genre && new Genre(
             genre.id,
-            genre.name,
+            genre.genre,
         ))
     }
 }
