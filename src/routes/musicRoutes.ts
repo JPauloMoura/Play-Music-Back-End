@@ -7,3 +7,4 @@ const musicController = new MusicController()
 
 musicRoute.post("/upload", authVerify, musicController.createMusic)
 musicRoute.get("/all", authVerify, musicController.getAllMusic)
+musicRoute.get("/details/:idMusic", authVerify, musicController.getDetailsMusic)

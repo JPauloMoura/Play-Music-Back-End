@@ -7,6 +7,7 @@ import { GenreDatabase } from "../data/GenreDatabase";
 import { Genre } from "../model/Genre";
 import { GenreMusicDatabase } from "../data/GenreMusicDatabase";
 import { GenreMusic } from "../model/GenreMusic";
+import { MusicDetails } from "../model/MusicDetails";
 
 export class MusicBusiness {
     constructor(
@@ -61,6 +62,20 @@ export class MusicBusiness {
             
         } catch (error) {
             throw new Error(error);  
+        }
+    }
+
+    public async getMusicDetails(idMusic:string): Promise<MusicDetails> {
+        try {
+            const music:Music = await this.musicDatabase.getMusicById(idMusic)
+            const genres:Genre[] = await this.genreDatabase.getGenresByIdMusic(idMusic)
+
+            const musicDetails:MusicDetails = MusicDetails.toMusicDetailsModel(music, genres)
+
+            return musicDetails
+
+        } catch (error) {
+            throw new Error(error);
         }
     }
 }

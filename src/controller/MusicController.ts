@@ -8,6 +8,7 @@ import { GenreDatabase } from "../data/GenreDatabase"
 import { MusicBusiness } from "../business/MusicBusiness"
 import { GenreMusicDatabase } from "../data/GenreMusicDatabase"
 import { S3Service } from "../services/S3Service"
+import { MusicDetails } from "../model/MusicDetails"
 
 export class MusicController {
     public async createMusic(req: Request, res: Response):Promise<void> {
@@ -66,6 +67,27 @@ export class MusicController {
             res.status(200).send(listMusic)
         } catch (error) {
             res.status(400).send({message: error.message || error.sqlMessage})
+        } finally{
+            await  BaseDatabase.destroyConnection()
+        }
+    }
+    
+    public async getDetailsMusic(req: Request, res: Response): Promise<void> {
+        try {
+            const musicBusiness = new MusicBusiness(
+                new Authenticator,
+                new MusicDatabase,
+                new GenreDatabase,
+                new GenreMusicDatabase,
+                new IdGenerator,
+            )
+            const details:MusicDetails = await musicBusiness.getMusicDetails(req.params.idMusic)
+
+            res.status(200).send(details)
+        } catch (error) {
+            res.status(400).send({message: error.message || error.sqlMessage})
+        } finally{
+            await  BaseDatabase.destroyConnection()
         }
     }
 }
