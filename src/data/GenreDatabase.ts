@@ -27,4 +27,19 @@ export class GenreDatabase extends BaseDatabase {
             throw new Error(err.Message || err.sqlMessage);
         }
     }
+
+    public getGenresByIdMusic = async (idMusic: string):Promise<Genre[]> => {
+        try {
+            const [ resp ] = await this.getConnection().raw(`
+                SELECT g.id, g.genre FROM ${this.tableNames.genre} AS g
+                JOIN ${this.tableNames.genreMusic} AS gm
+                ON gm.id_genre = g.id
+                WHERE gm.id_music = "${idMusic}";
+            `)
+        
+            return resp.map((item:Genre)=> Genre.toGenreModel(item))
+        } catch (err) {
+            throw new Error(err.Message || err.sqlMessage);
+        }
+    }
 }
